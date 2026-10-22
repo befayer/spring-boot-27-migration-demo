@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+# Gradle 8.14 запускается на JDK 17–24. Если JAVA_HOME не задан, берём подходящий JDK на macOS.
+set -eu
+
+PROJECT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
+if [ -z "${JAVA_HOME:-}" ] && [ -x /usr/libexec/java_home ]; then
+    JAVA_HOME=$(/usr/libexec/java_home -v 21 2>/dev/null || /usr/libexec/java_home -v 17 2>/dev/null || true)
+    [ -n "$JAVA_HOME" ] && export JAVA_HOME
+fi
+
+exec "$PROJECT_DIR/gradlew" "$@"

@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: billing-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/billing}
+    username: ${DB_USER:billing}
+    password: ${DB_PASSWORD:billing}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  sleuth:
+    trace-id128: true
+
+server:
+  port: ${PORT:8080}
+  # Gateway пробрасывает в X-Client-Context подписанный контекст клиента (до ~16 КБ).
+  max-http-header-size: 32KB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+billing:
+  api:
+    username: ${BILLING_API_USERNAME:billing}
+    password: ${BILLING_API_PASSWORD:billing-secret}
