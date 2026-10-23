@@ -12,7 +12,7 @@ import ru.kodacode.billing.invoice.Invoice;
 import ru.kodacode.billing.invoice.InvoiceLine;
 import ru.kodacode.billing.invoice.InvoiceService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class InvoiceController {
         this.invoices = invoices;
     }
 
-    @PostMapping
+    @PostMapping({"", "/"})
     public ResponseEntity<InvoiceResponse> issue(@Valid @RequestBody CreateInvoiceRequest request) {
         List<InvoiceLine> lines = request.getLines().stream()
             .map(line -> new InvoiceLine(line.getDescription(), line.getQuantity(), line.getUnitPrice()))
@@ -40,17 +40,19 @@ public class InvoiceController {
         return ResponseEntity.created(location).body(InvoiceResponse.from(invoice));
     }
 
-    @GetMapping
+    // В Spring 6 слэш на конце больше не матчится автоматически, а мобильный клиент 3.x
+    // запрашивает именно /api/invoices/. Явные пути сохраняют поведение Boot 2.7.
+    @GetMapping({"", "/"})
     public List<InvoiceResponse> list() {
         return invoices.list().stream().map(InvoiceResponse::from).collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping({"/{id}", "/{id}/"})
     public InvoiceResponse get(@PathVariable Long id) {
         return InvoiceResponse.from(invoices.get(id));
     }
 
-    @PostMapping("/{id}/payments")
+    @PostMapping({"/{id}/payments", "/{id}/payments/"})
     public InvoiceResponse pay(@PathVariable Long id) {
         return InvoiceResponse.from(invoices.pay(id));
     }
