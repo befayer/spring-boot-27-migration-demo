@@ -9,19 +9,21 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
-  sleuth:
-    trace-id128: true
 
 server:
   port: ${PORT:8080}
   # Gateway пробрасывает в X-Client-Context подписанный контекст клиента (до ~16 КБ).
-  max-http-header-size: 32KB
+  max-http-request-header-size: 32KB
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
+  tracing:
+    propagation:
+      # Gateway передаёт контекст в B3-заголовках (X-B3-TraceId/X-B3-SpanId/X-B3-Sampled).
+      type: B3_MULTI
 
 billing:
   api:
