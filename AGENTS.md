@@ -1,13 +1,13 @@
-# Repository instructions
+# Инструкции по работе с репозиторием
 
-This repository is a production service being upgraded from Spring Boot 2.7 to Spring Boot 3.5.
+Этот репозиторий содержит рабочий сервис, который переводится с Spring Boot 2.7 на Spring Boot 3.5.
 
-Read `docs/MIGRATION.md` before changing code. It defines the scope and the acceptance criteria.
+Перед изменением кода прочитать `docs/MIGRATION.md`. Этот документ определяет объём работ и критерии приёмки.
 
-`src/contractTest` is the executable API contract used by real clients. Never modify, delete, disable, or weaken these tests or their expectations to make the upgraded service pass. If a contract test fails, fix the application. If you believe a contract expectation is wrong, stop and report the exact conflict instead of changing it.
+`src/contractTest` — это исполняемый API-контракт, которым пользуются реальные клиенты. Никогда не изменять, не удалять, не отключать и не ослаблять эти тесты или их ожидания ради успешного прохождения проверки обновлённого сервиса. Если контрактный тест завершается с ошибкой, исправить приложение. Если есть сомнения, что ожидание в контракте ошибочно, остановиться и сообщить о конкретном противоречии вместо изменения теста.
 
-Do not change the public API, response formats, status codes, or headers.
+Публичный API не изменять, форматы ответов, коды состояния или заголовки.
 
-Use Gradle Kotlin DSL only. Run builds through `./gw`, never a system Gradle installation.
+Использовать только Gradle Kotlin DSL. Запускать сборку через `./gw` и никогда не использовать установленный в системе Gradle.
 
-Run `scripts/contract-check.sh` to verify the service. It starts PostgreSQL and the service, runs the contract tests, and stops the service.
+Для проверки сервиса запустить `scripts/contract-check.sh`. Скрипт запускает PostgreSQL и сервис, выполняет контрактные тесты, а затем останавливает сервис.
